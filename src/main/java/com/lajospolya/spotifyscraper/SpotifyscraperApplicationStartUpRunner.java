@@ -1,7 +1,7 @@
 package com.lajospolya.spotifyscraper;
 
-import com.lajospolya.spotifyscraper.spotifyresponse.ApiTokenResponse;
-import com.lajospolya.spotifyscraper.spotifywebservice.SpotifyAuthorize;
+import com.lajospolya.spotifyapiwrapper.authorization.SpotifyAuthorizationManager;
+import com.lajospolya.spotifyapiwrapper.client.SpotifyApiClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -13,13 +13,13 @@ public class SpotifyscraperApplicationStartUpRunner implements ApplicationRunner
     @Autowired
     private ClientAuthorizationProperties clientAuthorizationProperties;
 
-    @Autowired
-    private SpotifyAuthorize  spotifyAuthorize;
-
     @Override
-    public void run(ApplicationArguments args) throws Exception
+    public void run(ApplicationArguments args)
     {
-        ApiTokenResponse reponse = spotifyAuthorize.authorize(clientAuthorizationProperties.getClientId(), clientAuthorizationProperties.getClientSecret());
+
+        SpotifyApiClient client = SpotifyAuthorizationManager.getAuthorizedApiClient(clientAuthorizationProperties.getClientId(), clientAuthorizationProperties.getClientSecret());
+        client.getArtist();
+
         System.out.println("App Started");
         System.out.println(clientAuthorizationProperties.getClientId());
     }
