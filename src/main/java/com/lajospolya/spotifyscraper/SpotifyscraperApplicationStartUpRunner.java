@@ -6,6 +6,7 @@ import com.lajospolya.spotifyapiwrapper.client.SpotifyApiClient;
 import com.lajospolya.spotifyapiwrapper.client.SpotifyManagingClient;
 import com.lajospolya.spotifyapiwrapper.client.response.*;
 import com.lajospolya.spotifyapiwrapper.spotifyrequest.GetArtist;
+import com.lajospolya.spotifyapiwrapper.spotifyrequest.GetArtists;
 import com.lajospolya.spotifyapiwrapper.spotifyrequest.SpotifyRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
@@ -30,8 +31,15 @@ public class SpotifyscraperApplicationStartUpRunner implements ApplicationRunner
 
         SpotifyRequest<Artist> getArtist = new GetArtist.Builder("7Ln80lUS6He07XvHI8qqHH")
                 .build();
+
+        List<String> artistIds = new ArrayList<>();
+        artistIds.add("4LLpKhyESsyAXpc4laK94U");
+        artistIds.add("7Ln80lUS6He07XvHI8qqHH");
+        GetArtists getArtists = new GetArtists.Builder(artistIds).build();
+
         SpotifyManagingClient manager = new SpotifyManagingClient(authorizationResponse);
         Artist newArcticMonkeys = manager.sendRequest(getArtist);
+        Artists artists = manager.sendRequest(getArtists);
 
         //SpotifyApiClient client = new SpotifyApiClient(authorizationResponse);
         SpotifyApiClient client = SpotifyAuthorizationManager.getAuthorizedApiClient(clientAuthorizationProperties.getClientId(), clientAuthorizationProperties.getClientSecret());
