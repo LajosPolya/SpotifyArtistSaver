@@ -1,8 +1,12 @@
 package com.lajospolya.spotifyscraper;
 
 import com.lajospolya.spotifyapiwrapper.authorization.AuthorizationResponse;
+import com.lajospolya.spotifyapiwrapper.authorization.SpotifyAuthorizationManager;
 import com.lajospolya.spotifyapiwrapper.client.SpotifyApiClient;
+import com.lajospolya.spotifyapiwrapper.client.SpotifyManagingClient;
 import com.lajospolya.spotifyapiwrapper.client.response.*;
+import com.lajospolya.spotifyapiwrapper.spotifyrequest.GetArtist;
+import com.lajospolya.spotifyapiwrapper.spotifyrequest.SpotifyRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -21,10 +25,16 @@ public class SpotifyscraperApplicationStartUpRunner implements ApplicationRunner
     public void run(ApplicationArguments args)
     {
         AuthorizationResponse authorizationResponse = new AuthorizationResponse();
-        authorizationResponse.setAccessToken("BQAOlT7_xd4f3Kwso8VsSPHHxoHJhXy-cOWrAdF5oMMB2Kk199ickasd2ShGeunALL2e0Mmg5XPG-J-dcSw");
+        authorizationResponse.setAccessToken("BQBNKxaQDlAaEtXM1iG7qEfKBFTsNcfMHsL_OXVgIb9af2hvZ3_SQgsOgBumK8P9s7usU3tKKJGr0wAgz1s");
         authorizationResponse.setTokenType("Bearer");
-        SpotifyApiClient client = new SpotifyApiClient(authorizationResponse);
-        //SpotifyApiClient client = SpotifyAuthorizationManager.getAuthorizedApiClient(clientAuthorizationProperties.getClientId(), clientAuthorizationProperties.getClientSecret());
+
+        SpotifyRequest<Artist> getArtist = new GetArtist.Builder("7Ln80lUS6He07XvHI8qqHH")
+                .build();
+        SpotifyManagingClient manager = new SpotifyManagingClient(authorizationResponse);
+        Artist newArcticMonkeys = manager.sendRequest(getArtist);
+
+        //SpotifyApiClient client = new SpotifyApiClient(authorizationResponse);
+        SpotifyApiClient client = SpotifyAuthorizationManager.getAuthorizedApiClient(clientAuthorizationProperties.getClientId(), clientAuthorizationProperties.getClientSecret());
 
         getArtist(client);
         getArtists(client);
