@@ -24,10 +24,12 @@ public class SpotifyscraperApplicationStartUpRunner implements ApplicationRunner
     public void run(ApplicationArguments args)
     {
         AuthorizationResponse authorizationResponse = new AuthorizationResponse();
-        authorizationResponse.setAccessToken("BQC2PvNW5QNHxRCS0VYmDQN0cgK9kLe5CUBb8dQYYoCmSRAwWXx5aj5NEh8TmJ5KCntBE8UqiwJMptHv7Co");
+        authorizationResponse.setAccessToken("BQBHuEUQbNMAVR99XC61D6-D-fIeQM_yR134eKbHsXuIeOmTFm3Uh1ww009rh7sLlETjzFtq10a189ynso4");
         authorizationResponse.setTokenType("Bearer");
 
         SpotifyManagingClient manager = new SpotifyManagingClient(authorizationResponse);
+        getAlbums(manager);
+        getAudioAudioAnalysis(manager);
         getSeveralAudioFeatures(manager);
         getAudioFeatures(manager);
         getTrack(manager);
@@ -57,6 +59,24 @@ public class SpotifyscraperApplicationStartUpRunner implements ApplicationRunner
         getAlbumTracks(client);
 
         System.out.println("App Started");
+    }
+
+    private void getAlbums(SpotifyManagingClient manager)
+    {
+        List<String> albumIds = new ArrayList<>();
+        albumIds.add("2tH1S9Q2RUcLrOizMy9I1K");
+        albumIds.add("0S0KGZnfBGSIssfF54WSJh");
+        albumIds.add("4m2880jivSbbyEGAKfITCa");
+        GetAlbums getAlbumsRequest = new GetAlbums.Builder(albumIds).build();
+        Albums albums = manager.sendRequest(getAlbumsRequest);
+        System.out.println(albums);
+    }
+
+    private void getAudioAudioAnalysis(SpotifyManagingClient manager)
+    {
+        GetAudioAnalysis getAudioAnalysisRequest = new GetAudioAnalysis.Builder("74SFqzOS8Z0rbbG2llSVaQ").build();
+        String audioFeatures = manager.sendRequest(getAudioAnalysisRequest);
+        System.out.println(audioFeatures);
     }
 
     private void getSeveralAudioFeatures(SpotifyManagingClient manager)
