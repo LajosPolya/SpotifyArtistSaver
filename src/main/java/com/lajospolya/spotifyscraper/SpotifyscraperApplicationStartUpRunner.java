@@ -5,6 +5,7 @@ import com.lajospolya.spotifyapiwrapper.authorization.SpotifyAuthorizationManage
 import com.lajospolya.spotifyapiwrapper.client.SpotifyApiClient;
 import com.lajospolya.spotifyapiwrapper.client.SpotifyManagingClient;
 import com.lajospolya.spotifyapiwrapper.client.response.*;
+import com.lajospolya.spotifyapiwrapper.spotifyexception.SpotifyResponseException;
 import com.lajospolya.spotifyapiwrapper.spotifyrequest.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
@@ -24,21 +25,30 @@ public class SpotifyscraperApplicationStartUpRunner implements ApplicationRunner
     public void run(ApplicationArguments args)
     {
         AuthorizationResponse authorizationResponse = new AuthorizationResponse();
-        authorizationResponse.setAccessToken("BQBHuEUQbNMAVR99XC61D6-D-fIeQM_yR134eKbHsXuIeOmTFm3Uh1ww009rh7sLlETjzFtq10a189ynso4");
+        authorizationResponse.setAccessToken("BQDILkwqCnqsEzi1wgx60WTPslwsN5H_PXl5vieUffEPZAc3Xm2rCb00nUeH-8jlUZONTeln6LPIwGKk_0E");
         authorizationResponse.setTokenType("Bearer");
 
         SpotifyManagingClient manager = new SpotifyManagingClient(authorizationResponse);
-        getAlbums(manager);
-        getAudioAudioAnalysis(manager);
-        getSeveralAudioFeatures(manager);
-        getAudioFeatures(manager);
-        getTrack(manager);
-        getTracks(manager);
-        getArtistsRelatedArtists(manager);
-        getArtistsTopTracks(manager);
-        getArtistsAlbums(manager);
-        getArtists(manager);
-        getArtist(manager);
+        try
+        {
+            getAlbumsTracks(manager);
+            getAlbum(manager);
+            getAlbums(manager);
+            getAudioAudioAnalysis(manager);
+            getSeveralAudioFeatures(manager);
+            getAudioFeatures(manager);
+            getTrack(manager);
+            getTracks(manager);
+            getArtistsRelatedArtists(manager);
+            getArtistsTopTracks(manager);
+            getArtistsAlbums(manager);
+            getArtists(manager);
+            getArtist(manager);
+        }
+        catch (SpotifyResponseException e)
+        {
+            System.out.println("Caught SpotifyException");
+        }
 
         //SpotifyApiClient client = new SpotifyApiClient(authorizationResponse);
         SpotifyApiClient client = SpotifyAuthorizationManager.getAuthorizedApiClient(clientAuthorizationProperties.getClientId(), clientAuthorizationProperties.getClientSecret());
@@ -59,6 +69,22 @@ public class SpotifyscraperApplicationStartUpRunner implements ApplicationRunner
         getAlbumTracks(client);
 
         System.out.println("App Started");
+    }
+
+    private void getAlbumsTracks(SpotifyManagingClient manager)
+    {
+        String albumId = "1HLd8IsRFf0siJGgVMZ8HZ";
+        GetAlbumsTracks getAlbumsTracksRequest = new GetAlbumsTracks.Builder(albumId).build();
+        Paging<SimplifiedTrack> tracks = manager.sendRequest(getAlbumsTracksRequest);
+        System.out.println(tracks);
+    }
+
+    private void getAlbum(SpotifyManagingClient manager)
+    {
+        String albumId = "5yMCA6HdFAeL1aqUjxO3MO";
+        GetAlbum getAlbumRequest = new GetAlbum.Builder(albumId).build();
+        Album album = manager.sendRequest(getAlbumRequest);
+        System.out.println(album);
     }
 
     private void getAlbums(SpotifyManagingClient manager)
