@@ -2,6 +2,7 @@ package com.lajospolya.spotifyscraper;
 
 import com.lajospolya.spotifyapiwrapper.authorization.AuthorizationResponse;
 import com.lajospolya.spotifyapiwrapper.authorization.SpotifyAuthorizationManager;
+import com.lajospolya.spotifyapiwrapper.client.AlbumType;
 import com.lajospolya.spotifyapiwrapper.client.SpotifyApiClient;
 import com.lajospolya.spotifyapiwrapper.client.SpotifyManagingClient;
 import com.lajospolya.spotifyapiwrapper.client.response.*;
@@ -25,7 +26,7 @@ public class SpotifyscraperApplicationStartUpRunner implements ApplicationRunner
     public void run(ApplicationArguments args)
     {
         AuthorizationResponse authorizationResponse = new AuthorizationResponse();
-        authorizationResponse.setAccessToken("BQDILkwqCnqsEzi1wgx60WTPslwsN5H_PXl5vieUffEPZAc3Xm2rCb00nUeH-8jlUZONTeln6LPIwGKk_0E");
+        authorizationResponse.setAccessToken("BQAYDuKxmk2l72-xOUhrp8foQiSFpzokeZ2h8onvyCij7b1hpSPQkcX2o7vnOrVqPE5zF91NHwLFA9vUtek");
         authorizationResponse.setTokenType("Bearer");
 
         SpotifyManagingClient manager = new SpotifyManagingClient(authorizationResponse);
@@ -74,7 +75,8 @@ public class SpotifyscraperApplicationStartUpRunner implements ApplicationRunner
     private void getAlbumsTracks(SpotifyManagingClient manager)
     {
         String albumId = "1HLd8IsRFf0siJGgVMZ8HZ";
-        GetAlbumsTracks getAlbumsTracksRequest = new GetAlbumsTracks.Builder(albumId).build();
+        GetAlbumsTracks getAlbumsTracksRequest = new GetAlbumsTracks.Builder(albumId)
+                .offset(0).limit(50).market("CA").build();
         Paging<SimplifiedTrack> tracks = manager.sendRequest(getAlbumsTracksRequest);
         System.out.println(tracks);
     }
@@ -82,7 +84,8 @@ public class SpotifyscraperApplicationStartUpRunner implements ApplicationRunner
     private void getAlbum(SpotifyManagingClient manager)
     {
         String albumId = "5yMCA6HdFAeL1aqUjxO3MO";
-        GetAlbum getAlbumRequest = new GetAlbum.Builder(albumId).build();
+        GetAlbum getAlbumRequest = new GetAlbum.Builder(albumId)
+                .market("CA").build();
         Album album = manager.sendRequest(getAlbumRequest);
         System.out.println(album);
     }
@@ -93,7 +96,8 @@ public class SpotifyscraperApplicationStartUpRunner implements ApplicationRunner
         albumIds.add("2tH1S9Q2RUcLrOizMy9I1K");
         albumIds.add("0S0KGZnfBGSIssfF54WSJh");
         albumIds.add("4m2880jivSbbyEGAKfITCa");
-        GetAlbums getAlbumsRequest = new GetAlbums.Builder(albumIds).build();
+        GetAlbums getAlbumsRequest = new GetAlbums.Builder(albumIds)
+                .market("CA").build();
         Albums albums = manager.sendRequest(getAlbumsRequest);
         System.out.println(albums);
     }
@@ -157,7 +161,11 @@ public class SpotifyscraperApplicationStartUpRunner implements ApplicationRunner
 
     private void getArtistsAlbums(SpotifyManagingClient manager)
     {
-        GetArtistsAlbums artistAlbumsRequest = new GetArtistsAlbums.Builder("5jLbQGcvxehi2Z6qkUP9Rh").build();
+        List<AlbumType> includeGroups = new ArrayList<>();
+        includeGroups.add(AlbumType.SINGLE);
+        includeGroups.add(AlbumType.ALBUM);
+        GetArtistsAlbums artistAlbumsRequest = new GetArtistsAlbums.Builder("5jLbQGcvxehi2Z6qkUP9Rh")
+                .limit(50).offset(0).market("CA").albumType(includeGroups).build();
         ArtistsAlbums albums = manager.sendRequest(artistAlbumsRequest);
         System.out.println(albums);
     }
