@@ -27,23 +27,23 @@ public class SpotifyscraperApplicationStartUpRunner implements ApplicationRunner
         authorizationResponse.setAccessToken("BQAYDuKxmk2l72-xOUhrp8foQiSFpzokeZ2h8onvyCij7b1hpSPQkcX2o7vnOrVqPE5zF91NHwLFA9vUtek");
         authorizationResponse.setTokenType("Bearer");
 
-        SpotifyApiClient authorizedManager = SpotifyApiClient
+        SpotifyApiClient client = SpotifyApiClient
                 .createClientCredentialsAuthorizedClient(clientAuthorizationProperties.getClientId(), clientAuthorizationProperties.getClientSecret());
         try
         {
-            getAlbumsTracks(authorizedManager);
-            getAlbum(authorizedManager);
-            getAlbums(authorizedManager);
-            getAudioAudioAnalysis(authorizedManager);
-            getSeveralAudioFeatures(authorizedManager);
-            getAudioFeatures(authorizedManager);
-            getTrack(authorizedManager);
-            getTracks(authorizedManager);
-            getArtistsRelatedArtists(authorizedManager);
-            getArtistsTopTracks(authorizedManager);
-            getArtistsAlbums(authorizedManager);
-            getArtists(authorizedManager);
-            getArtist(authorizedManager);
+            getAlbumsTracks(client);
+            getAlbum(client);
+            getAlbums(client);
+            getAudioAudioAnalysis(client);
+            getSeveralAudioFeatures(client);
+            getAudioFeatures(client);
+            getTrack(client);
+            getTracks(client);
+            getArtistsRelatedArtists(client);
+            getArtistsTopTracks(client);
+            getArtistsAlbums(client);
+            getArtists(client);
+            getArtist(client);
         }
         catch (SpotifyResponseException e)
         {
@@ -110,7 +110,8 @@ public class SpotifyscraperApplicationStartUpRunner implements ApplicationRunner
 
     private void getTrack(SpotifyApiClient manager)
     {
-        GetTrack getTrackRequest = new GetTrack.Builder("1EaKU4dMbesXXd3BrLCtYG").build();
+        GetTrack getTrackRequest = new GetTrack.Builder("1EaKU4dMbesXXd3BrLCtYG")
+                .market("CA").build();
         Track track = manager.sendRequest(getTrackRequest);
         System.out.println(track);
     }
@@ -121,7 +122,8 @@ public class SpotifyscraperApplicationStartUpRunner implements ApplicationRunner
         trackIds.add("3YB9cvd668HXBEq8rbBW8P");
         trackIds.add("44ObvXOOdYZMKWV9pwS3be");
         trackIds.add("3X8yPPFopeDilHeB89R5El");
-        GetTracks getTracksRequest = new GetTracks.Builder(trackIds).build();
+        GetTracks getTracksRequest = new GetTracks.Builder(trackIds)
+                .market("CA").build();
         Tracks tracks = manager.sendRequest(getTracksRequest);
         System.out.println(tracks);
     }
