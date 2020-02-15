@@ -27,7 +27,8 @@ public class SpotifyscraperApplicationStartUpRunner implements ApplicationRunner
         authorizationResponse.setAccessToken("BQAYDuKxmk2l72-xOUhrp8foQiSFpzokeZ2h8onvyCij7b1hpSPQkcX2o7vnOrVqPE5zF91NHwLFA9vUtek");
         authorizationResponse.setTokenType("Bearer");
 
-        SpotifyApiClient authorizedManager = SpotifyApiClient.createClientCredentialsAuthorizedClient(clientAuthorizationProperties.getClientId(), clientAuthorizationProperties.getClientSecret());
+        SpotifyApiClient authorizedManager = SpotifyApiClient
+                .createClientCredentialsAuthorizedClient(clientAuthorizationProperties.getClientId(), clientAuthorizationProperties.getClientSecret());
         try
         {
             getAlbumsTracks(authorizedManager);
