@@ -33,6 +33,7 @@ public class SpotifyscraperApplicationStartUpRunner implements ApplicationRunner
                 .createClientCredentialsAuthorizedClient(clientAuthorizationProperties.getClientId(), clientAuthorizationProperties.getClientSecret());
         try
         {
+            getAllNewReleases(client);
             getRecommendationGenres(client);
             getRecommendations(client);
             getCategorysPlaylists(client);
@@ -59,6 +60,17 @@ public class SpotifyscraperApplicationStartUpRunner implements ApplicationRunner
         }
 
         System.out.println("App Started");
+    }
+
+    private void getAllNewReleases(SpotifyApiClient client)
+    {
+        GetAllNewReleases recomendationGenresRequest = new GetAllNewReleases.Builder()
+                .country("CA")
+                .limit(50)
+                .offset(0)
+                .build();
+        NewReleases recommendationGenres = client.sendRequest(recomendationGenresRequest);
+        System.out.println(recommendationGenres);
     }
 
     private void getRecommendationGenres(SpotifyApiClient client)
