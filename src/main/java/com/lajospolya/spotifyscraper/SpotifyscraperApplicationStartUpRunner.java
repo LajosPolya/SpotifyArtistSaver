@@ -26,14 +26,20 @@ public class SpotifyscraperApplicationStartUpRunner implements ApplicationRunner
     @Override
     public void run(ApplicationArguments args)
     {
-        AuthorizationResponse authorizationResponse = new AuthorizationResponse();
-        authorizationResponse.setAccessToken("BQAYDuKxmk2l72-xOUhrp8foQiSFpzokeZ2h8onvyCij7b1hpSPQkcX2o7vnOrVqPE5zF91NHwLFA9vUtek");
-        authorizationResponse.setTokenType("Bearer");
+        ClientCredentialsFlowResponse clientCredentialsFlowResponse = new ClientCredentialsFlowResponse();
+        clientCredentialsFlowResponse.setAccessToken("BQAYDuKxmk2l72-xOUhrp8foQiSFpzokeZ2h8onvyCij7b1hpSPQkcX2o7vnOrVqPE5zF91NHwLFA9vUtek");
+        clientCredentialsFlowResponse.setTokenType("Bearer");
 
         SpotifyApiClient client = SpotifyApiClient
-                .createClientCredentialsAuthorizedClient(clientAuthorizationProperties.getClientId(), clientAuthorizationProperties.getClientSecret());
+                .createClientCredentialsFlowClient(clientAuthorizationProperties.getClientId(), clientAuthorizationProperties.getClientSecret());
+
+        SpotifyApiClient authorizeCodeFlowClient = SpotifyApiClient.createAuthorizationFlowClient(clientAuthorizationProperties.getClientId(), clientAuthorizationProperties.getClientSecret(),
+                clientAuthorizationProperties.getCode(), clientAuthorizationProperties.getRedirectUrl());
+
+
         try
         {
+            getUser(authorizeCodeFlowClient);
             getFeaturesPlaylists(client);
             getAllNewReleases(client);
             getRecommendationGenres(client);
@@ -62,6 +68,14 @@ public class SpotifyscraperApplicationStartUpRunner implements ApplicationRunner
         }
 
         System.out.println("App Started");
+    }
+
+    private void getUser(SpotifyApiClient client)
+    {
+        String userId = "lajospolya";
+        GetUser getUserRequest = new GetUser.Builder(userId).build();
+        UserPublic user = client.sendRequest(getUserRequest);
+        System.out.println(user);
     }
 
     private void getFeaturesPlaylists(SpotifyApiClient client)

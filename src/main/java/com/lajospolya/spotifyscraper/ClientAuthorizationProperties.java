@@ -17,6 +17,12 @@ public class ClientAuthorizationProperties
     @NotBlank(message = "clientSecret cannot be empty")
     private String clientSecret;
 
+    @NotBlank(message = "code cannot be empty")
+    private String code;
+
+    @NotBlank(message = "redirectUrl cannot be empty")
+    private String redirectUrl;
+
     public String getClientId()
     {
         return clientId;
@@ -35,5 +41,25 @@ public class ClientAuthorizationProperties
     public void setClientSecret(String clientSecret)
     {
         this.clientSecret = clientSecret;
+    }
+
+    public String getCode()
+    {
+        return code;
+    }
+
+    public void setCode(String code)
+    {
+        this.code = code;
+    }
+
+    public String getRedirectUrl()
+    {
+        return redirectUrl;
+    }
+
+    public void setRedirectUrl(String redirectUrl)
+    {
+        this.redirectUrl = redirectUrl;
     }
 }
