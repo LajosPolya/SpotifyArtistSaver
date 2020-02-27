@@ -2,6 +2,7 @@ package com.lajospolya.spotifyscraper;
 
 import com.lajospolya.spotifyapiwrapper.client.SpotifyApiClient;
 import com.lajospolya.spotifyapiwrapper.enumeration.AlbumType;
+import com.lajospolya.spotifyapiwrapper.enumeration.ExternalContent;
 import com.lajospolya.spotifyapiwrapper.enumeration.SearchItemType;
 import com.lajospolya.spotifyapiwrapper.response.*;
 import com.lajospolya.spotifyapiwrapper.spotifyexception.SpotifyResponseException;
@@ -33,6 +34,7 @@ public class SpotifyscraperApplicationStartUpRunner implements ApplicationRunner
                 .createClientCredentialsAuthorizedClient(clientAuthorizationProperties.getClientId(), clientAuthorizationProperties.getClientSecret());
         try
         {
+            getFeaturesPlaylists(client);
             getAllNewReleases(client);
             getRecommendationGenres(client);
             getRecommendations(client);
@@ -60,6 +62,18 @@ public class SpotifyscraperApplicationStartUpRunner implements ApplicationRunner
         }
 
         System.out.println("App Started");
+    }
+
+    private void getFeaturesPlaylists(SpotifyApiClient client)
+    {
+        GetFeaturesPlaylists featuredPlaylistsRequest = new GetFeaturesPlaylists.Builder()
+                .country("BR")
+                .limit(50)
+                .offset(0)
+                .timestamp("2014-10-23T09:00:00")
+                .build();
+        FeaturedPlaylists featuredPlaylists = client.sendRequest(featuredPlaylistsRequest);
+        System.out.println(featuredPlaylists);
     }
 
     private void getAllNewReleases(SpotifyApiClient client)
@@ -174,7 +188,7 @@ public class SpotifyscraperApplicationStartUpRunner implements ApplicationRunner
         searchItemTypes.add(SearchItemType.Playlist);
         searchItemTypes.add(SearchItemType.Track);
         GetSearch searchRequest = new GetSearch.Builder(query, searchItemTypes)
-                .offset(0).limit(50).market("CA").build();
+                .offset(0).limit(50).market("CA").includeExternal(ExternalContent.Audio).build();
         SearchResults results = client.sendRequest(searchRequest);
         System.out.println(results);
     }
