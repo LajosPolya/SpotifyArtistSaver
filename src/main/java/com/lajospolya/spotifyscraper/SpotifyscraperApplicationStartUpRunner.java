@@ -30,16 +30,18 @@ public class SpotifyscraperApplicationStartUpRunner implements ApplicationRunner
         clientCredentialsFlowResponse.setAccessToken("BQAYDuKxmk2l72-xOUhrp8foQiSFpzokeZ2h8onvyCij7b1hpSPQkcX2o7vnOrVqPE5zF91NHwLFA9vUtek");
         clientCredentialsFlowResponse.setTokenType("Bearer");
 
-        SpotifyApiClient client = SpotifyApiClient
-                .createClientCredentialsFlowClient(clientAuthorizationProperties.getClientId(), clientAuthorizationProperties.getClientSecret());
+        //SpotifyApiClient client = SpotifyApiClient
+        //        .createClientCredentialsFlowClient(clientAuthorizationProperties.getClientId(), clientAuthorizationProperties.getClientSecret());
 
-        SpotifyApiClient authorizeCodeFlowClient = SpotifyApiClient.createAuthorizationFlowClient(clientAuthorizationProperties.getClientId(), clientAuthorizationProperties.getClientSecret(),
+        SpotifyApiClient client = SpotifyApiClient.createAuthorizationFlowClient(clientAuthorizationProperties.getClientId(), clientAuthorizationProperties.getClientSecret(),
                 clientAuthorizationProperties.getCode(), clientAuthorizationProperties.getRedirectUrl());
 
 
         try
         {
-            getUser(authorizeCodeFlowClient);
+            getMeFollowing(client);
+            getMe(client);
+            getUser(client);
             getFeaturesPlaylists(client);
             getAllNewReleases(client);
             getRecommendationGenres(client);
@@ -68,6 +70,23 @@ public class SpotifyscraperApplicationStartUpRunner implements ApplicationRunner
         }
 
         System.out.println("App Started");
+    }
+
+    private void getMeFollowing(SpotifyApiClient client)
+    {
+        List<String> ids = new ArrayList<>();
+        ids.add("1ctkBmvz80MGyi72Ix055S");
+
+        GetMeFollowing getMeRequest = new GetMeFollowing.Builder("artist", ids).build();
+        List<Boolean> me = client.sendRequest(getMeRequest);
+        System.out.println(me);
+    }
+
+    private void getMe(SpotifyApiClient client)
+    {
+        GetMe getMeRequest = new GetMe.Builder().build();
+        UserPublic me = client.sendRequest(getMeRequest);
+        System.out.println(me);
     }
 
     private void getUser(SpotifyApiClient client)
