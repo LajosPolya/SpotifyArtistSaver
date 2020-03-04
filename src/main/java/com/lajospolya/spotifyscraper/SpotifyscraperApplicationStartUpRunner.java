@@ -1,9 +1,7 @@
 package com.lajospolya.spotifyscraper;
 
 import com.lajospolya.spotifyapiwrapper.client.SpotifyApiClient;
-import com.lajospolya.spotifyapiwrapper.enumeration.AlbumType;
-import com.lajospolya.spotifyapiwrapper.enumeration.ExternalContent;
-import com.lajospolya.spotifyapiwrapper.enumeration.SearchItemType;
+import com.lajospolya.spotifyapiwrapper.enumeration.*;
 import com.lajospolya.spotifyapiwrapper.response.*;
 import com.lajospolya.spotifyapiwrapper.spotifyexception.SpotifyResponseException;
 import com.lajospolya.spotifyapiwrapper.spotifyrequest.*;
@@ -39,7 +37,15 @@ public class SpotifyscraperApplicationStartUpRunner implements ApplicationRunner
 
         try
         {
+            getTopArtists(client);
+            getTopTracks(client);
+            deleteFollowingPlaylist(client);
+            deleteMeFollowing(client);
             getMeFollowing(client);
+            putPlaylist(client);
+            putFollow(client);
+            getUserFollowsPlaylist(client);
+            getMeFollowingContains(client);
             getMe(client);
             getUser(client);
             getFeaturesPlaylists(client);
@@ -72,12 +78,99 @@ public class SpotifyscraperApplicationStartUpRunner implements ApplicationRunner
         System.out.println("App Started");
     }
 
+    private void getTopArtists(SpotifyApiClient client)
+    {
+        GetUsersTopArtists getUsersTopTracksRequest = new GetUsersTopArtists.Builder()
+                .limit(50)
+                .offset(0)
+                .timeRange(TimeRange.long_term)
+                .build();
+        Paging<Artist> topTracks = client.sendRequest(getUsersTopTracksRequest);
+        System.out.println(topTracks);
+    }
+
+    private void getTopTracks(SpotifyApiClient client)
+    {
+        GetUsersTopTracks getUsersTopTracksRequest = new GetUsersTopTracks.Builder()
+                .limit(50)
+                .offset(0)
+                .timeRange(TimeRange.medium_term)
+                .build();
+        Paging<Track> topTracks = client.sendRequest(getUsersTopTracksRequest);
+        System.out.println(topTracks);
+    }
+
+    private void deleteFollowingPlaylist(SpotifyApiClient client)
+    {
+        DeleteFollowPlaylist deleteFollowingRequest = new DeleteFollowPlaylist.Builder("1khS5Pll0YEduwuZdciEbe")
+                .build();
+        Void unfollow = client.sendRequest(deleteFollowingRequest);
+        System.out.println(unfollow);
+    }
+
+    private void deleteMeFollowing(SpotifyApiClient client)
+    {
+        // Create a package for bodies
+        // this and put follow has bodies objects
+        List<String> ids = new ArrayList<>();
+        ids.add("37M5pPGs6V1fchFJSgCguX");
+        DeleteFollow deleteFollowingRequest = new DeleteFollow.Builder(FollowType.artist, ids)
+                .build();
+        Void unfollow = client.sendRequest(deleteFollowingRequest);
+        System.out.println(unfollow);
+    }
+
     private void getMeFollowing(SpotifyApiClient client)
+    {
+        GetMeFollowing getFollowingRequest = new GetMeFollowing.Builder(FollowType.artist)
+                .limit(50)
+                .after("0rH93aHDYyJfMAcPB9OKus")
+                .build();
+        Following following = client.sendRequest(getFollowingRequest);
+        System.out.println(following);
+    }
+
+    private void putPlaylist(SpotifyApiClient client)
+    {
+        String id = "1khS5Pll0YEduwuZdciEbe";
+
+        PutFollowPlaylist getUserFollowsPlaylistRequest = new PutFollowPlaylist.Builder(id)
+                .isPublic(false)
+                .build();
+        Void follows = client.sendRequest(getUserFollowsPlaylistRequest);
+        System.out.println(follows);
+    }
+
+    private void putFollow(SpotifyApiClient client)
+    {
+        List<String> ids = new ArrayList<>();
+        ids.add("greentekki");
+
+        PutFollow getUserFollowsPlaylistRequest = new PutFollow.Builder(FollowType.user, ids)
+                .build();
+        Void follows = client.sendRequest(getUserFollowsPlaylistRequest);
+        System.out.println(follows);
+    }
+
+    private void getUserFollowsPlaylist(SpotifyApiClient client)
+    {
+        List<String> ids = new ArrayList<>();
+        ids.add("szucs2020");
+        ids.add("lajospolya");
+        ids.add("matebors21");
+
+        GetUsersFollowsPlaylist getUserFollowsPlaylistRequest = new GetUsersFollowsPlaylist.Builder("3VJcxliXZ3178iws5iimId", ids)
+                .build();
+        List<Boolean> follows = client.sendRequest(getUserFollowsPlaylistRequest);
+        System.out.println(follows);
+    }
+
+    private void getMeFollowingContains(SpotifyApiClient client)
     {
         List<String> ids = new ArrayList<>();
         ids.add("1ctkBmvz80MGyi72Ix055S");
 
-        GetMeFollowing getMeRequest = new GetMeFollowing.Builder("artist", ids).build();
+        GetMeFollowingContains getMeRequest = new GetMeFollowingContains.Builder(FollowType.artist, ids).build();
         List<Boolean> me = client.sendRequest(getMeRequest);
         System.out.println(me);
     }
