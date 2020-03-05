@@ -37,6 +37,12 @@ public class SpotifyscraperApplicationStartUpRunner implements ApplicationRunner
 
         try
         {
+            getMeTracks(client);
+            getUserIfSavedAlbums(client);
+            putMeTracks(client);
+            deleteMeTracks(client);
+            putMeAlbums(client);
+            deleteMeAlbums(client);
             getTopArtists(client);
             getTopTracks(client);
             deleteFollowingPlaylist(client);
@@ -78,6 +84,75 @@ public class SpotifyscraperApplicationStartUpRunner implements ApplicationRunner
         System.out.println("App Started");
     }
 
+    private void getMeTracks(SpotifyApiClient client)
+    {
+        GetMeTracks getAlbumsTracksRequest = new GetMeTracks.Builder()
+                .offset(0).limit(50).market("CA").build();
+        Paging<SavedTrack> tracks = client.sendRequest(getAlbumsTracksRequest);
+        System.out.println(tracks);
+    }
+
+    private void getUserIfSavedAlbums(SpotifyApiClient client)
+    {
+        List<String> ids = new ArrayList<>();
+        ids.add("1eN0asiUp2OoMuRkI61cmm");
+        ids.add("5ZnOKznPxZTWuMusR4tmGG");
+        GetMeAlbumsContains hasSavedAlbumRequest = new GetMeAlbumsContains.Builder(ids)
+                .build();
+        List<Boolean> hasSaveToLibrary = client.sendRequest(hasSavedAlbumRequest);
+        System.out.println(hasSaveToLibrary);
+    }
+
+    private void putMeTracks(SpotifyApiClient client)
+    {
+        List<String> ids = new ArrayList<>();
+        ids.add("7LlkkivFiUXnnT8poNrE7k");
+        ids.add("1NlGXcWeUSe1s3IgRKcqmB");
+        ids.add("1w327AHTCoChRIkJUprAnV");
+        ids.add("59DqOEiZvbyRNHew4U6guS");
+        PutMeTracks saveToLibraryRequest = new PutMeTracks.Builder(ids)
+                .build();
+        Void saveToLibrary = client.sendRequest(saveToLibraryRequest);
+        System.out.println(saveToLibrary);
+    }
+
+    private void deleteMeTracks(SpotifyApiClient client)
+    {
+        List<String> ids = new ArrayList<>();
+        ids.add("7LlkkivFiUXnnT8poNrE7k");
+        ids.add("1NlGXcWeUSe1s3IgRKcqmB");
+        ids.add("1w327AHTCoChRIkJUprAnV");
+        ids.add("59DqOEiZvbyRNHew4U6guS");
+        DeleteMeTracks removeFromLibraryRequest = new DeleteMeTracks.Builder(ids)
+                .build();
+        Void removeFrom = client.sendRequest(removeFromLibraryRequest);
+        System.out.println(removeFrom);
+    }
+
+    private void deleteMeAlbums(SpotifyApiClient client)
+    {
+        List<String> ids = new ArrayList<>();
+        ids.add("7wGLeeJt18EBjc181FP2cM");
+        ids.add("3TC40H9dIJArFzy0rWnWCg");
+        ids.add("16ah4zHJlxx3wjRFg3nkSl");
+        DeleteMeAlbums deleteFollowingRequest = new DeleteMeAlbums.Builder(ids)
+                .build();
+        Void unfollow = client.sendRequest(deleteFollowingRequest);
+        System.out.println(unfollow);
+    }
+
+    private void putMeAlbums(SpotifyApiClient client)
+    {
+        List<String> ids = new ArrayList<>();
+        ids.add("7wGLeeJt18EBjc181FP2cM");
+        ids.add("3TC40H9dIJArFzy0rWnWCg");
+        ids.add("16ah4zHJlxx3wjRFg3nkSl");
+        PutMeAlbums saveToLibraryRequest = new PutMeAlbums.Builder(ids)
+                .build();
+        Void saveToLibrary = client.sendRequest(saveToLibraryRequest);
+        System.out.println(saveToLibrary);
+    }
+
     private void getTopArtists(SpotifyApiClient client)
     {
         GetUsersTopArtists getUsersTopTracksRequest = new GetUsersTopArtists.Builder()
@@ -110,8 +185,6 @@ public class SpotifyscraperApplicationStartUpRunner implements ApplicationRunner
 
     private void deleteMeFollowing(SpotifyApiClient client)
     {
-        // Create a package for bodies
-        // this and put follow has bodies objects
         List<String> ids = new ArrayList<>();
         ids.add("37M5pPGs6V1fchFJSgCguX");
         DeleteFollow deleteFollowingRequest = new DeleteFollow.Builder(FollowType.artist, ids)
