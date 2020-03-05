@@ -37,6 +37,8 @@ public class SpotifyscraperApplicationStartUpRunner implements ApplicationRunner
 
         try
         {
+            getMeAlbums(client);
+            getUserIfSavedTracks(client);
             getMeTracks(client);
             getUserIfSavedAlbums(client);
             putMeTracks(client);
@@ -84,11 +86,30 @@ public class SpotifyscraperApplicationStartUpRunner implements ApplicationRunner
         System.out.println("App Started");
     }
 
+    private void getMeAlbums(SpotifyApiClient client)
+    {
+        GetMeAlbums getUsersTracksRequest = new GetMeAlbums.Builder()
+                .offset(0).limit(50).market("CA").build();
+        Paging<SavedAlbum> tracks = client.sendRequest(getUsersTracksRequest);
+        System.out.println(tracks);
+    }
+
+    private void getUserIfSavedTracks(SpotifyApiClient client)
+    {
+        List<String> ids = new ArrayList<>();
+        ids.add("07GvNcU1WdyZJq3XxP0kZa");
+        ids.add("35rf8iduzQ7vd8hFbDlv0o");
+        GetMeTracksContains hasSavedTracksRequest = new GetMeTracksContains.Builder(ids)
+                .build();
+        List<Boolean> hasSaveToLibrary = client.sendRequest(hasSavedTracksRequest);
+        System.out.println(hasSaveToLibrary);
+    }
+
     private void getMeTracks(SpotifyApiClient client)
     {
-        GetMeTracks getAlbumsTracksRequest = new GetMeTracks.Builder()
+        GetMeTracks getUsersTracksRequest = new GetMeTracks.Builder()
                 .offset(0).limit(50).market("CA").build();
-        Paging<SavedTrack> tracks = client.sendRequest(getAlbumsTracksRequest);
+        Paging<SavedTrack> tracks = client.sendRequest(getUsersTracksRequest);
         System.out.println(tracks);
     }
 
