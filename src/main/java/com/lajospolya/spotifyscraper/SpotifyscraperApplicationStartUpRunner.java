@@ -21,6 +21,8 @@ public class SpotifyscraperApplicationStartUpRunner implements ApplicationRunner
     @Autowired
     private ClientAuthorizationProperties clientAuthorizationProperties;
 
+    private static String snapshotId = null;
+
     @Override
     public void run(ApplicationArguments args)
     {
@@ -37,6 +39,12 @@ public class SpotifyscraperApplicationStartUpRunner implements ApplicationRunner
 
         try
         {
+            postPlaylistsAdd(client);
+            putPlaylistsReorder(client);
+            putPlaylistsImages(client);
+            putPlaylists(client);
+            getUsersPlaylists(client);
+            putPlaylistTracks(client);
             getMeAlbums(client);
             getUserIfSavedTracks(client);
             getMeTracks(client);
@@ -84,6 +92,67 @@ public class SpotifyscraperApplicationStartUpRunner implements ApplicationRunner
         }
 
         System.out.println("App Started");
+    }
+
+    private void postPlaylistsAdd(SpotifyApiClient client)
+    {
+        List<String> trackIds = new ArrayList<>();
+        trackIds.add("spotify:track:63xdwScd1Ai1GigAwQxE8y");
+        trackIds.add("spotify:track:5uIRujGRZv5t4fGKkUTv4n");
+
+        PostPlaylistsTracksAdd playlistRequest = new PostPlaylistsTracksAdd.Builder("3X3gtW72Wwh6v1RR27ZgDe")
+                .position(0).uris(trackIds).build();
+        PlaylistSnapshot addTracks = client.sendRequest(playlistRequest);
+        snapshotId = addTracks.getSnapshot_id();
+        System.out.println(addTracks);
+    }
+
+    private void putPlaylistsReorder(SpotifyApiClient client)
+    {
+        PutPlaylistsTracksReorder playlistRequest = new PutPlaylistsTracksReorder.Builder("3X3gtW72Wwh6v1RR27ZgDe", 0, 3)
+                .rangeLength(2).snapshotId(snapshotId).build();
+        Void reorder = client.sendRequest(playlistRequest);
+        System.out.println(reorder);
+    }
+
+    private void putPlaylistsImages(SpotifyApiClient client)
+    {
+        PutPlaylistsImages changePlaylistImageRequest = new PutPlaylistsImages.Builder("3X3gtW72Wwh6v1RR27ZgDe", clientAuthorizationProperties.getBase64Image())
+                .build();
+        Void image = client.sendRequest(changePlaylistImageRequest);
+        System.out.println(image);
+    }
+
+    private void putPlaylists(SpotifyApiClient client)
+    {
+        PutPlaylists changePlaylistDetailsRequest = new PutPlaylists.Builder("3X3gtW72Wwh6v1RR27ZgDe")
+                .name("API Names Dev Playlist")
+                .collaborative(false).isPublic(true)
+                .description("This is the new description created by an PUT playlists").build();
+        Void details = client.sendRequest(changePlaylistDetailsRequest);
+        System.out.println(details);
+    }
+
+    private void getUsersPlaylists(SpotifyApiClient client)
+    {
+        GetUsersPlaylists getUsersTracksRequest = new GetUsersPlaylists.Builder("lajospolya")
+                .offset(0).limit(50).build();
+        Paging<SimplifiedPlaylist> playlists = client.sendRequest(getUsersTracksRequest);
+        System.out.println(playlists);
+    }
+
+    private void putPlaylistTracks(SpotifyApiClient client)
+    {
+        List<String> ids = new ArrayList<>();
+        ids.add("spotify:track:44ObvXOOdYZMKWV9pwS3be");
+        ids.add("spotify:track:5fpZBXuorlUCC9SP6LVuw3");
+        ids.add("spotify:track:1wYZZtamWTQAoj8B812uKQ");
+        ids.add("spotify:track:7djV61C5MXUcorsFktQJsL");
+        ids.add("spotify:track:4IO92oN7CBOKruobrRca0I");
+        PutPlaylistsTracks hasSavedTracksRequest = new PutPlaylistsTracks.Builder("3X3gtW72Wwh6v1RR27ZgDe", ids)
+                .build();
+        Void saved = client.sendRequest(hasSavedTracksRequest);
+        System.out.println(saved);
     }
 
     private void getMeAlbums(SpotifyApiClient client)
@@ -286,7 +355,7 @@ public class SpotifyscraperApplicationStartUpRunner implements ApplicationRunner
 
     private void getFeaturesPlaylists(SpotifyApiClient client)
     {
-        GetFeaturesPlaylists featuredPlaylistsRequest = new GetFeaturesPlaylists.Builder()
+        GetFeaturedPlaylists featuredPlaylistsRequest = new GetFeaturedPlaylists.Builder()
                 .country("BR")
                 .limit(50)
                 .offset(0)

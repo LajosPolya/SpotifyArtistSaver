@@ -23,6 +23,9 @@ public class ClientAuthorizationProperties
     @NotBlank(message = "redirectUrl cannot be empty")
     private String redirectUrl;
 
+    @NotBlank(message = "base64Image cannot be empty")
+    private String base64Image;
+
     public String getClientId()
     {
         return clientId;
@@ -61,5 +64,15 @@ public class ClientAuthorizationProperties
     public void setRedirectUrl(String redirectUrl)
     {
         this.redirectUrl = redirectUrl;
+    }
+
+    public String getBase64Image()
+    {
+        return base64Image;
+    }
+
+    public void setBase64Image(String base64Image)
+    {
+        this.base64Image = base64Image;
     }
 }
