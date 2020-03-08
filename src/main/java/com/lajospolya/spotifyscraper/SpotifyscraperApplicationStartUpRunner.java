@@ -39,6 +39,7 @@ public class SpotifyscraperApplicationStartUpRunner implements ApplicationRunner
 
         try
         {
+            getPlaylistsTracks(client);
             postPlaylistsAdd(client);
             putPlaylistsReorder(client);
             putPlaylistsImages(client);
@@ -92,6 +93,14 @@ public class SpotifyscraperApplicationStartUpRunner implements ApplicationRunner
         }
 
         System.out.println("App Started");
+    }
+
+    private void getPlaylistsTracks(SpotifyApiClient client)
+    {
+        GetPlaylistsTracks playlistRequest = new GetPlaylistsTracks.Builder("3X3gtW72Wwh6v1RR27ZgDe")
+                .offset(0).limit(100).market("CA").build();
+        Paging<PlaylistTrack> playlistTracks = client.sendRequest(playlistRequest);
+        System.out.println(playlistTracks);
     }
 
     private void postPlaylistsAdd(SpotifyApiClient client)
