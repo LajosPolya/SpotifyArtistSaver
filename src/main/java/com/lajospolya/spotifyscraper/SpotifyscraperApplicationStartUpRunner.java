@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.lajospolya.spotifyapiwrapper.enumeration.TuneableTrackAttributeFactory.acousticness;
 
@@ -23,6 +24,7 @@ public class SpotifyscraperApplicationStartUpRunner implements ApplicationRunner
     private ClientAuthorizationProperties clientAuthorizationProperties;
 
     private static String snapshotId = null;
+    private static List<String> deviceIds = null;
 
     @Override
     public void run(ApplicationArguments args)
@@ -41,6 +43,8 @@ public class SpotifyscraperApplicationStartUpRunner implements ApplicationRunner
         try
         {
             getMeDevices(client);
+            postMePlayerNext(client);
+            putMePlayer(client);
             getMePlayer(client);
             putMePlayerPause(client);
             //Transfer a User's Playback
@@ -118,10 +122,27 @@ public class SpotifyscraperApplicationStartUpRunner implements ApplicationRunner
 
     private void getMeDevices(SpotifyApiClient client)
     {
-        GetMeDevices putMePlayerPauseRequest = new GetMeDevices.Builder()
+        GetMePlayerDevices getMePlayerDevicesRequest = new GetMePlayerDevices.Builder()
                 .build();
-        Devices player = client.sendRequest(putMePlayerPauseRequest);
-        System.out.println(player);
+        Devices devices = client.sendRequest(getMePlayerDevicesRequest);
+        deviceIds = devices.getDevices().stream().map(Device::getId).collect(Collectors.toList());
+        System.out.println(devices);
+    }
+
+    private void postMePlayerNext(SpotifyApiClient client)
+    {
+        PostMePlayerNext postMeNextRequest = new PostMePlayerNext.Builder()
+                .deviceId(deviceIds.get(0)).build();
+        Void none = client.sendRequest(postMeNextRequest);
+        System.out.println(none);
+    }
+
+    private void putMePlayer(SpotifyApiClient client)
+    {
+        PutMePlayer putMePlayerRequest = new PutMePlayer.Builder(deviceIds)
+                .play(true).build();
+        Void none = client.sendRequest(putMePlayerRequest);
+        System.out.println(none);
     }
 
     private void getMePlayer(SpotifyApiClient client)
@@ -135,7 +156,7 @@ public class SpotifyscraperApplicationStartUpRunner implements ApplicationRunner
     private void putMePlayerPause(SpotifyApiClient client)
     {
         PutMePlayerPause putMePlayerPauseRequest = new PutMePlayerPause.Builder()
-                .build();
+                .deviceId(deviceIds.get(0)).build();
         Void none = client.sendRequest(putMePlayerPauseRequest);
         System.out.println(none);
     }
@@ -144,9 +165,9 @@ public class SpotifyscraperApplicationStartUpRunner implements ApplicationRunner
     {
         List<String> uris = new ArrayList<>();
         uris.add("spotify:album:5lOFvOWAdy9G6p44noRILU");
-        PutMePlayerPlay putMePlayerShuffleRequest = new PutMePlayerPlay.Builder()
+        PutMePlayerPlay putMePlayerPlayRequest = new PutMePlayerPlay.Builder()
                 .offset(0).positionMs(130000).uris(uris).build();
-        Void none = client.sendRequest(putMePlayerShuffleRequest);
+        Void none = client.sendRequest(putMePlayerPlayRequest);
         System.out.println(none);
     }
 
@@ -161,7 +182,7 @@ public class SpotifyscraperApplicationStartUpRunner implements ApplicationRunner
     private void putMePlayerSeek(SpotifyApiClient client)
     {
         PutMePlayerSeek putMePlayerSeekRequest = new PutMePlayerSeek.Builder(120000)
-                .build();
+                .deviceId(deviceIds.get(0)).build();
         Void none = client.sendRequest(putMePlayerSeekRequest);
         System.out.println(none);
     }
