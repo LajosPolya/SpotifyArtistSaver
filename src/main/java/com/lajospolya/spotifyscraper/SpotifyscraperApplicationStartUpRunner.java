@@ -57,7 +57,7 @@ public class SpotifyscraperApplicationStartUpRunner implements ApplicationRunner
             // more testing later
             //putMePlayerRepeat(client);
             getMePlayerHistory(client);
-            getMePlayerPrevious(client);
+            postMePlayerPrevious(client);
             getMePlayerCurrentlyPlaying(client);
             postMePlayerQueue(client);
             deletePlaylistsTracks(client);
@@ -133,32 +133,32 @@ public class SpotifyscraperApplicationStartUpRunner implements ApplicationRunner
     {
         PostMePlayerNext postMeNextRequest = new PostMePlayerNext.Builder()
                 .deviceId(deviceIds.get(0)).build();
-        Void none = client.sendRequest(postMeNextRequest);
-        System.out.println(none);
+        //Void none = client.sendRequest(postMeNextRequest);
+        //System.out.println(none);
     }
 
     private void putMePlayer(SpotifyApiClient client)
     {
         PutMePlayer putMePlayerRequest = new PutMePlayer.Builder(deviceIds)
                 .play(true).build();
-        Void none = client.sendRequest(putMePlayerRequest);
-        System.out.println(none);
+        //Void none = client.sendRequest(putMePlayerRequest);
+        //System.out.println(none);
     }
 
     private void getMePlayer(SpotifyApiClient client)
     {
         GetMePlayer putMePlayerPauseRequest = new GetMePlayer.Builder("CA")
                 .build();
-        String player = client.sendRequest(putMePlayerPauseRequest);
-        System.out.println(player);
+        //String player = client.sendRequest(putMePlayerPauseRequest);
+        //System.out.println(player);
     }
 
     private void putMePlayerPause(SpotifyApiClient client)
     {
         PutMePlayerPause putMePlayerPauseRequest = new PutMePlayerPause.Builder()
                 .deviceId(deviceIds.get(0)).build();
-        Void none = client.sendRequest(putMePlayerPauseRequest);
-        System.out.println(none);
+        //Void none = client.sendRequest(putMePlayerPauseRequest);
+        //System.out.println(none);
     }
 
     private void putMePlayerPlay(SpotifyApiClient client)
@@ -175,16 +175,16 @@ public class SpotifyscraperApplicationStartUpRunner implements ApplicationRunner
     {
         PutMePlayerShuffle putMePlayerShuffleRequest = new PutMePlayerShuffle.Builder(true)
                 .build();
-        Void none = client.sendRequest(putMePlayerShuffleRequest);
-        System.out.println(none);
+        //Void none = client.sendRequest(putMePlayerShuffleRequest);
+        //System.out.println(none);
     }
 
     private void putMePlayerSeek(SpotifyApiClient client)
     {
         PutMePlayerSeek putMePlayerSeekRequest = new PutMePlayerSeek.Builder(120000)
                 .deviceId(deviceIds.get(0)).build();
-        Void none = client.sendRequest(putMePlayerSeekRequest);
-        System.out.println(none);
+        //Void none = client.sendRequest(putMePlayerSeekRequest);
+        //System.out.println(none);
     }
 
     private void putMePlayerVolume(SpotifyApiClient client)
@@ -211,72 +211,72 @@ public class SpotifyscraperApplicationStartUpRunner implements ApplicationRunner
         System.out.println(history);
     }
 
-    private void getMePlayerPrevious(SpotifyApiClient client)
+    private void postMePlayerPrevious(SpotifyApiClient client)
     {
         PostMePlayerPrevious getMePlayerPreviousRequest = new PostMePlayerPrevious.Builder()
-                .build();
-        Void none = client.sendRequest(getMePlayerPreviousRequest);
-        System.out.println(none);
+                .deviceId(deviceIds.get(0)).build();
+        //Void none = client.sendRequest(getMePlayerPreviousRequest);
+        //System.out.println(none);
     }
 
     private void getMePlayerCurrentlyPlaying(SpotifyApiClient client)
     {
         GetMePlayerCurrentlyPlaying getMePlayerCurrentlyPlayingRequest = new GetMePlayerCurrentlyPlaying.Builder("CA")
                 .build();
-        String track = client.sendRequest(getMePlayerCurrentlyPlayingRequest);
-        System.out.println(track);
+        //String track = client.sendRequest(getMePlayerCurrentlyPlayingRequest);
+        //System.out.println(track);
     }
 
     private void postMePlayerQueue(SpotifyApiClient client)
     {
         PostMePlayerQueue postMePlayerQueueRequest = new PostMePlayerQueue.Builder("spotify:track:61mWefnWQOLf90gepjOCb3")
-                .build();
-        Void none = client.sendRequest(postMePlayerQueueRequest);
-        System.out.println(none);
+                .deviceId(deviceIds.get(0)).build();
+        //Void none = client.sendRequest(postMePlayerQueueRequest);
+        //System.out.println(none);
     }
 
     private void deletePlaylistsTracks(SpotifyApiClient client)
     {
         List<String> ids = new ArrayList<>();
         ids.add("spotify:track:63xdwScd1Ai1GigAwQxE8y");
-        DeletePlaylistsTracks removeFromLibraryRequest = new DeletePlaylistsTracks.Builder("3X3gtW72Wwh6v1RR27ZgDe", ids)
-                .build();
-        PlaylistSnapshot snapshot = client.sendRequest(removeFromLibraryRequest);
-        snapshotId = snapshot.getSnapshot_id();
-        System.out.println(snapshotId);
+        //DeletePlaylistsTracks removeFromLibraryRequest = new DeletePlaylistsTracks.Builder("3X3gtW72Wwh6v1RR27ZgDe", ids)
+        //        .build();
+        //PlaylistSnapshot snapshot = client.sendRequest(removeFromLibraryRequest);
+        //snapshotId = snapshot.getSnapshot_id();
+        //System.out.println(snapshotId);
     }
 
     private void postPlaylists(SpotifyApiClient client)
     {
-        PostUsersPlaylists changePlaylistDetailsRequest = new PostUsersPlaylists.Builder("lajospolya", "Created By API")
+        PostUsersPlaylists createPlaylistRequest = new PostUsersPlaylists.Builder("lajospolya", "Created By API")
                 .collaborative(false).isPublic(true)
                 .description("Created a playlist with new description").build();
-        Playlist details = client.sendRequest(changePlaylistDetailsRequest);
-        System.out.println(details);
+        //Playlist details = client.sendRequest(createPlaylistRequest);
+        //System.out.println(details);
     }
 
     private void getPlaylist(SpotifyApiClient client)
     {
         GetPlaylist changePlaylistImageRequest = new GetPlaylist.Builder("3X3gtW72Wwh6v1RR27ZgDe")
                 .build();
-        Playlist playlist = client.sendRequest(changePlaylistImageRequest);
-        System.out.println(playlist);
+        //Playlist playlist = client.sendRequest(changePlaylistImageRequest);
+        //System.out.println(playlist);
     }
 
     private void getPlaylistsImages(SpotifyApiClient client)
     {
         GetPlaylistsImages changePlaylistImageRequest = new GetPlaylistsImages.Builder("3X3gtW72Wwh6v1RR27ZgDe")
                 .build();
-        List<Image> images = client.sendRequest(changePlaylistImageRequest);
-        System.out.println(images);
+        //List<Image> images = client.sendRequest(changePlaylistImageRequest);
+        //System.out.println(images);
     }
 
     private void getPlaylistsTracks(SpotifyApiClient client)
     {
         GetPlaylistsTracks playlistRequest = new GetPlaylistsTracks.Builder("3X3gtW72Wwh6v1RR27ZgDe")
                 .offset(0).limit(100).market("CA").build();
-        Paging<PlaylistTrack> playlistTracks = client.sendRequest(playlistRequest);
-        System.out.println(playlistTracks);
+        //Paging<PlaylistTrack> playlistTracks = client.sendRequest(playlistRequest);
+        //System.out.println(playlistTracks);
     }
 
     private void postPlaylistsAdd(SpotifyApiClient client)
@@ -287,25 +287,26 @@ public class SpotifyscraperApplicationStartUpRunner implements ApplicationRunner
 
         PostPlaylistsTracksAdd playlistRequest = new PostPlaylistsTracksAdd.Builder("3X3gtW72Wwh6v1RR27ZgDe")
                 .position(0).uris(trackIds).build();
-        PlaylistSnapshot addTracks = client.sendRequest(playlistRequest);
-        snapshotId = addTracks.getSnapshot_id();
-        System.out.println(addTracks);
+        PlaylistSnapshot snapshot = client.sendRequest(playlistRequest);
+        snapshotId = snapshot.getSnapshot_id();
+        System.out.println(snapshotId);
     }
 
     private void putPlaylistsReorder(SpotifyApiClient client)
     {
         PutPlaylistsTracksReorder playlistRequest = new PutPlaylistsTracksReorder.Builder("3X3gtW72Wwh6v1RR27ZgDe", 0, 3)
                 .rangeLength(2).snapshotId(snapshotId).build();
-        Void reorder = client.sendRequest(playlistRequest);
-        System.out.println(reorder);
+        //PlaylistSnapshot reorder = client.sendRequest(playlistRequest);
+        //snapshotId = reorder.getSnapshot_id();
+        //System.out.println(snapshotId);
     }
 
     private void putPlaylistsImages(SpotifyApiClient client)
     {
         PutPlaylistsImages changePlaylistImageRequest = new PutPlaylistsImages.Builder("3X3gtW72Wwh6v1RR27ZgDe", clientAuthorizationProperties.getBase64Image())
                 .build();
-        Void image = client.sendRequest(changePlaylistImageRequest);
-        System.out.println(image);
+        //Void image = client.sendRequest(changePlaylistImageRequest);
+        //System.out.println(image);
     }
 
     private void putPlaylists(SpotifyApiClient client)
@@ -314,16 +315,16 @@ public class SpotifyscraperApplicationStartUpRunner implements ApplicationRunner
                 .name("API Names Dev Playlist")
                 .collaborative(false).isPublic(true)
                 .description("This is the new description created by an PUT playlists").build();
-        Void details = client.sendRequest(changePlaylistDetailsRequest);
-        System.out.println(details);
+        //Void details = client.sendRequest(changePlaylistDetailsRequest);
+        //System.out.println(details);
     }
 
     private void getUsersPlaylists(SpotifyApiClient client)
     {
         GetUsersPlaylists getUsersTracksRequest = new GetUsersPlaylists.Builder("lajospolya")
                 .offset(0).limit(50).build();
-        Paging<SimplifiedPlaylist> playlists = client.sendRequest(getUsersTracksRequest);
-        System.out.println(playlists);
+        //Paging<SimplifiedPlaylist> playlists = client.sendRequest(getUsersTracksRequest);
+        //System.out.println(playlists);
     }
 
     private void putPlaylistTracks(SpotifyApiClient client)
@@ -336,16 +337,16 @@ public class SpotifyscraperApplicationStartUpRunner implements ApplicationRunner
         ids.add("spotify:track:4IO92oN7CBOKruobrRca0I");
         PutPlaylistsTracks hasSavedTracksRequest = new PutPlaylistsTracks.Builder("3X3gtW72Wwh6v1RR27ZgDe", ids)
                 .build();
-        Void saved = client.sendRequest(hasSavedTracksRequest);
-        System.out.println(saved);
+        //Void saved = client.sendRequest(hasSavedTracksRequest);
+        //System.out.println(saved);
     }
 
     private void getMeAlbums(SpotifyApiClient client)
     {
         GetMeAlbums getUsersTracksRequest = new GetMeAlbums.Builder()
                 .offset(0).limit(50).market("CA").build();
-        Paging<SavedAlbum> tracks = client.sendRequest(getUsersTracksRequest);
-        System.out.println(tracks);
+        //Paging<SavedAlbum> tracks = client.sendRequest(getUsersTracksRequest);
+        //System.out.println(tracks);
     }
 
     private void getUserIfSavedTracks(SpotifyApiClient client)
@@ -355,16 +356,16 @@ public class SpotifyscraperApplicationStartUpRunner implements ApplicationRunner
         ids.add("35rf8iduzQ7vd8hFbDlv0o");
         GetMeTracksContains hasSavedTracksRequest = new GetMeTracksContains.Builder(ids)
                 .build();
-        List<Boolean> hasSaveToLibrary = client.sendRequest(hasSavedTracksRequest);
-        System.out.println(hasSaveToLibrary);
+        //List<Boolean> hasSaveToLibrary = client.sendRequest(hasSavedTracksRequest);
+        //System.out.println(hasSaveToLibrary);
     }
 
     private void getMeTracks(SpotifyApiClient client)
     {
         GetMeTracks getUsersTracksRequest = new GetMeTracks.Builder()
                 .offset(0).limit(50).market("CA").build();
-        Paging<SavedTrack> tracks = client.sendRequest(getUsersTracksRequest);
-        System.out.println(tracks);
+        //Paging<SavedTrack> tracks = client.sendRequest(getUsersTracksRequest);
+        //System.out.println(tracks);
     }
 
     private void getUserIfSavedAlbums(SpotifyApiClient client)
@@ -374,8 +375,8 @@ public class SpotifyscraperApplicationStartUpRunner implements ApplicationRunner
         ids.add("5ZnOKznPxZTWuMusR4tmGG");
         GetMeAlbumsContains hasSavedAlbumRequest = new GetMeAlbumsContains.Builder(ids)
                 .build();
-        List<Boolean> hasSaveToLibrary = client.sendRequest(hasSavedAlbumRequest);
-        System.out.println(hasSaveToLibrary);
+        //List<Boolean> hasSaveToLibrary = client.sendRequest(hasSavedAlbumRequest);
+        //System.out.println(hasSaveToLibrary);
     }
 
     private void putMeTracks(SpotifyApiClient client)
@@ -387,8 +388,8 @@ public class SpotifyscraperApplicationStartUpRunner implements ApplicationRunner
         ids.add("59DqOEiZvbyRNHew4U6guS");
         PutMeTracks saveToLibraryRequest = new PutMeTracks.Builder(ids)
                 .build();
-        Void saveToLibrary = client.sendRequest(saveToLibraryRequest);
-        System.out.println(saveToLibrary);
+        //Void saveToLibrary = client.sendRequest(saveToLibraryRequest);
+        //System.out.println(saveToLibrary);
     }
 
     private void deleteMeTracks(SpotifyApiClient client)
@@ -400,20 +401,8 @@ public class SpotifyscraperApplicationStartUpRunner implements ApplicationRunner
         ids.add("59DqOEiZvbyRNHew4U6guS");
         DeleteMeTracks removeFromLibraryRequest = new DeleteMeTracks.Builder(ids)
                 .build();
-        Void removeFrom = client.sendRequest(removeFromLibraryRequest);
-        System.out.println(removeFrom);
-    }
-
-    private void deleteMeAlbums(SpotifyApiClient client)
-    {
-        List<String> ids = new ArrayList<>();
-        ids.add("7wGLeeJt18EBjc181FP2cM");
-        ids.add("3TC40H9dIJArFzy0rWnWCg");
-        ids.add("16ah4zHJlxx3wjRFg3nkSl");
-        DeleteMeAlbums deleteFollowingRequest = new DeleteMeAlbums.Builder(ids)
-                .build();
-        Void unfollow = client.sendRequest(deleteFollowingRequest);
-        System.out.println(unfollow);
+        //Void removeFrom = client.sendRequest(removeFromLibraryRequest);
+        //System.out.println(removeFrom);
     }
 
     private void putMeAlbums(SpotifyApiClient client)
@@ -422,40 +411,44 @@ public class SpotifyscraperApplicationStartUpRunner implements ApplicationRunner
         ids.add("7wGLeeJt18EBjc181FP2cM");
         ids.add("3TC40H9dIJArFzy0rWnWCg");
         ids.add("16ah4zHJlxx3wjRFg3nkSl");
-        PutMeAlbums saveToLibraryRequest = new PutMeAlbums.Builder(ids)
-                .build();
-        Void saveToLibrary = client.sendRequest(saveToLibraryRequest);
-        System.out.println(saveToLibrary);
+        //PutMeAlbums saveToLibraryRequest = new PutMeAlbums.Builder(ids).build();
+        //Void saveToLibrary = client.sendRequest(saveToLibraryRequest);
+        //System.out.println(saveToLibrary);
+    }
+
+    private void deleteMeAlbums(SpotifyApiClient client)
+    {
+        List<String> ids = new ArrayList<>();
+        ids.add("7wGLeeJt18EBjc181FP2cM");
+        ids.add("3TC40H9dIJArFzy0rWnWCg");
+        ids.add("16ah4zHJlxx3wjRFg3nkSl");
+        //DeleteMeAlbums deleteFollowingRequest = new DeleteMeAlbums.Builder(ids).build();
+        //Void unfollow = client.sendRequest(deleteFollowingRequest);
+        //System.out.println(unfollow);
     }
 
     private void getTopArtists(SpotifyApiClient client)
     {
-        GetUsersTopArtists getUsersTopTracksRequest = new GetUsersTopArtists.Builder()
-                .limit(50)
-                .offset(0)
-                .timeRange(TimeRange.long_term)
-                .build();
-        Paging<Artist> topTracks = client.sendRequest(getUsersTopTracksRequest);
-        System.out.println(topTracks);
+        GetUsersTopArtists getUsersTopArtistsRequest = new GetUsersTopArtists.Builder()
+                .limit(50).offset(0).timeRange(TimeRange.long_term).build();
+        //Paging<Artist> topArtists = client.sendRequest(getUsersTopArtistsRequest);
+        //System.out.println(topArtists);
     }
 
     private void getTopTracks(SpotifyApiClient client)
     {
         GetUsersTopTracks getUsersTopTracksRequest = new GetUsersTopTracks.Builder()
-                .limit(50)
-                .offset(0)
-                .timeRange(TimeRange.medium_term)
-                .build();
-        Paging<Track> topTracks = client.sendRequest(getUsersTopTracksRequest);
-        System.out.println(topTracks);
+                .limit(50).offset(0).timeRange(TimeRange.medium_term).build();
+        //Paging<Track> topTracks = client.sendRequest(getUsersTopTracksRequest);
+        //System.out.println(topTracks);
     }
 
     private void deleteFollowingPlaylist(SpotifyApiClient client)
     {
         DeleteFollowPlaylist deleteFollowingRequest = new DeleteFollowPlaylist.Builder("1khS5Pll0YEduwuZdciEbe")
                 .build();
-        Void unfollow = client.sendRequest(deleteFollowingRequest);
-        System.out.println(unfollow);
+        //Void unfollow = client.sendRequest(deleteFollowingRequest);
+        //System.out.println(unfollow);
     }
 
     private void deleteMeFollowing(SpotifyApiClient client)
@@ -464,18 +457,16 @@ public class SpotifyscraperApplicationStartUpRunner implements ApplicationRunner
         ids.add("37M5pPGs6V1fchFJSgCguX");
         DeleteFollow deleteFollowingRequest = new DeleteFollow.Builder(FollowType.artist, ids)
                 .build();
-        Void unfollow = client.sendRequest(deleteFollowingRequest);
-        System.out.println(unfollow);
+        //Void unfollow = client.sendRequest(deleteFollowingRequest);
+        //System.out.println(unfollow);
     }
 
     private void getMeFollowing(SpotifyApiClient client)
     {
         GetMeFollowing getFollowingRequest = new GetMeFollowing.Builder(FollowType.artist)
-                .limit(50)
-                .after("0rH93aHDYyJfMAcPB9OKus")
-                .build();
-        Following following = client.sendRequest(getFollowingRequest);
-        System.out.println(following);
+                .limit(50).after("0rH93aHDYyJfMAcPB9OKus").build();
+        //Following following = client.sendRequest(getFollowingRequest);
+        //System.out.println(following);
     }
 
     private void putPlaylist(SpotifyApiClient client)
@@ -483,10 +474,9 @@ public class SpotifyscraperApplicationStartUpRunner implements ApplicationRunner
         String id = "1khS5Pll0YEduwuZdciEbe";
 
         PutFollowPlaylist getUserFollowsPlaylistRequest = new PutFollowPlaylist.Builder(id)
-                .isPublic(false)
-                .build();
-        Void follows = client.sendRequest(getUserFollowsPlaylistRequest);
-        System.out.println(follows);
+                .isPublic(false).build();
+        //Void follows = client.sendRequest(getUserFollowsPlaylistRequest);
+        //System.out.println(follows);
     }
 
     private void putFollow(SpotifyApiClient client)
@@ -496,8 +486,8 @@ public class SpotifyscraperApplicationStartUpRunner implements ApplicationRunner
 
         PutFollow getUserFollowsPlaylistRequest = new PutFollow.Builder(FollowType.user, ids)
                 .build();
-        Void follows = client.sendRequest(getUserFollowsPlaylistRequest);
-        System.out.println(follows);
+        //Void follows = client.sendRequest(getUserFollowsPlaylistRequest);
+        //System.out.println(follows);
     }
 
     private void getUserFollowsPlaylist(SpotifyApiClient client)
@@ -509,8 +499,8 @@ public class SpotifyscraperApplicationStartUpRunner implements ApplicationRunner
 
         GetUsersFollowsPlaylist getUserFollowsPlaylistRequest = new GetUsersFollowsPlaylist.Builder("3VJcxliXZ3178iws5iimId", ids)
                 .build();
-        List<Boolean> follows = client.sendRequest(getUserFollowsPlaylistRequest);
-        System.out.println(follows);
+        //List<Boolean> follows = client.sendRequest(getUserFollowsPlaylistRequest);
+        //System.out.println(follows);
     }
 
     private void getMeFollowingContains(SpotifyApiClient client)
@@ -519,54 +509,47 @@ public class SpotifyscraperApplicationStartUpRunner implements ApplicationRunner
         ids.add("1ctkBmvz80MGyi72Ix055S");
 
         GetMeFollowingContains getMeRequest = new GetMeFollowingContains.Builder(FollowType.artist, ids).build();
-        List<Boolean> me = client.sendRequest(getMeRequest);
-        System.out.println(me);
+        //List<Boolean> me = client.sendRequest(getMeRequest);
+        //System.out.println(me);
     }
 
     private void getMe(SpotifyApiClient client)
     {
         GetMe getMeRequest = new GetMe.Builder().build();
-        UserPublic me = client.sendRequest(getMeRequest);
-        System.out.println(me);
+        //UserPublic me = client.sendRequest(getMeRequest);
+        //System.out.println(me);
     }
 
     private void getUser(SpotifyApiClient client)
     {
         String userId = "lajospolya";
         GetUser getUserRequest = new GetUser.Builder(userId).build();
-        UserPublic user = client.sendRequest(getUserRequest);
-        System.out.println(user);
+        //UserPublic user = client.sendRequest(getUserRequest);
+        //System.out.println(user);
     }
 
     private void getFeaturesPlaylists(SpotifyApiClient client)
     {
         GetFeaturedPlaylists featuredPlaylistsRequest = new GetFeaturedPlaylists.Builder()
-                .country("BR")
-                .limit(50)
-                .offset(0)
-                .timestamp("2014-10-23T09:00:00")
-                .build();
-        FeaturedPlaylists featuredPlaylists = client.sendRequest(featuredPlaylistsRequest);
-        System.out.println(featuredPlaylists);
+                .country("BR").limit(50).offset(0).timestamp("2014-10-23T09:00:00").build();
+        //FeaturedPlaylists featuredPlaylists = client.sendRequest(featuredPlaylistsRequest);
+        //System.out.println(featuredPlaylists);
     }
 
     private void getAllNewReleases(SpotifyApiClient client)
     {
-        GetAllNewReleases recomendationGenresRequest = new GetAllNewReleases.Builder()
-                .country("CA")
-                .limit(50)
-                .offset(0)
-                .build();
-        NewReleases recommendationGenres = client.sendRequest(recomendationGenresRequest);
-        System.out.println(recommendationGenres);
+        GetAllNewReleases recommendationGenresRequest = new GetAllNewReleases.Builder()
+                .country("CA").limit(50).offset(0).build();
+        //NewReleases recommendationGenres = client.sendRequest(recommendationGenresRequest);
+        //System.out.println(recommendationGenres);
     }
 
     private void getRecommendationGenres(SpotifyApiClient client)
     {
         GetRecomendationGenres recomendationGenresRequest = new GetRecomendationGenres.Builder()
                 .build();
-        RecommendationGenres recommendationGenres = client.sendRequest(recomendationGenresRequest);
-        System.out.println(recommendationGenres);
+        //RecommendationGenres recommendationGenres = client.sendRequest(recomendationGenresRequest);
+        //System.out.println(recommendationGenres);
     }
 
     private void getRecommendations(SpotifyApiClient client)
@@ -580,11 +563,8 @@ public class SpotifyscraperApplicationStartUpRunner implements ApplicationRunner
         List<String> genres = new ArrayList<>();
         genres.add("sheffield indie");
         GetRecommendations recommendationsRequest = new GetRecommendations.Builder(artists, tracks, genres)
-                .limit(100)
-                .market("CA")
-                .min(acousticness, 0.0)
-                .max(acousticness, 1.0)
-                .target(acousticness, 0.5)
+                .limit(100).market("CA")
+                .min(acousticness, 0.0).max(acousticness, 1.0).target(acousticness, 0.5)
                 //.min(danceability, 0.0)
                 //.max(danceability, 1.0)
                 //.target(danceability, 0.5)
@@ -625,32 +605,32 @@ public class SpotifyscraperApplicationStartUpRunner implements ApplicationRunner
                 //.max(valence, 1.0)
                 //.target(valence, 0.66)
                 .build();
-        Recommendation recommendations = client.sendRequest(recommendationsRequest);
-        System.out.println(recommendations);
+        //Recommendation recommendations = client.sendRequest(recommendationsRequest);
+        //System.out.println(recommendations);
     }
 
     private void getCategorysPlaylists(SpotifyApiClient client)
     {
         GetCategorysPlaylists searchRequest = new GetCategorysPlaylists.Builder("hiphop")
                 .country("CA").locale("de_DE").build();
-        CategorysPlaylists categorysPlaylist = client.sendRequest(searchRequest);
-        System.out.println(categorysPlaylist);
+        //CategorysPlaylists categorysPlaylist = client.sendRequest(searchRequest);
+        //System.out.println(categorysPlaylist);
     }
 
     private void getCategory(SpotifyApiClient client)
     {
         GetCategory searchRequest = new GetCategory.Builder("toplists")
                 .country("CA").locale("es_MX").build();
-        Category category = client.sendRequest(searchRequest);
-        System.out.println(category);
+        //Category category = client.sendRequest(searchRequest);
+        //System.out.println(category);
     }
 
     private void getAllCategories(SpotifyApiClient client)
     {
         GetAllCategories searchRequest = new GetAllCategories.Builder()
                 .offset(0).limit(50).country("CA").locale("en_CA").build();
-        Categories categories = client.sendRequest(searchRequest);
-        System.out.println(categories);
+        //Categories categories = client.sendRequest(searchRequest);
+        //System.out.println(categories);
     }
 
     private void getSearch(SpotifyApiClient client)
@@ -663,8 +643,8 @@ public class SpotifyscraperApplicationStartUpRunner implements ApplicationRunner
         searchItemTypes.add(SearchItemType.Track);
         GetSearch searchRequest = new GetSearch.Builder(query, searchItemTypes)
                 .offset(0).limit(50).market("CA").includeExternal(ExternalContent.Audio).build();
-        SearchResults results = client.sendRequest(searchRequest);
-        System.out.println(results);
+        //SearchResults results = client.sendRequest(searchRequest);
+        //System.out.println(results);
     }
 
     private void getAlbumsTracks(SpotifyApiClient client)
