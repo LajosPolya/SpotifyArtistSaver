@@ -29,16 +29,16 @@ public class SpotifyscraperApplicationStartUpRunner implements ApplicationRunner
     @Override
     public void run(ApplicationArguments args)
     {
-        ClientCredentialsFlowResponse clientCredentialsFlowResponse = new ClientCredentialsFlowResponse();
-        clientCredentialsFlowResponse.setAccessToken("BQAYDuKxmk2l72-xOUhrp8foQiSFpzokeZ2h8onvyCij7b1hpSPQkcX2o7vnOrVqPE5zF91NHwLFA9vUtek");
-        clientCredentialsFlowResponse.setTokenType("Bearer");
+        AuthorizingToken authorizingToken = new AuthorizingToken();
+        authorizingToken.setAccessToken("BQAYDuKxmk2l72-xOUhrp8foQiSFpzokeZ2h8onvyCij7b1hpSPQkcX2o7vnOrVqPE5zF91NHwLFA9vUtek");
+        authorizingToken.setTokenType("Bearer");
 
         //SpotifyApiClient client = SpotifyApiClient
         //        .createClientCredentialsFlowClient(clientAuthorizationProperties.getClientId(), clientAuthorizationProperties.getClientSecret());
 
         SpotifyApiClient client = SpotifyApiClient.createAuthorizationFlowClient(clientAuthorizationProperties.getClientId(), clientAuthorizationProperties.getClientSecret(),
                 clientAuthorizationProperties.getCode(), clientAuthorizationProperties.getRedirectUrl());
-
+        client.reauthorize();
 
         try
         {
@@ -173,7 +173,7 @@ public class SpotifyscraperApplicationStartUpRunner implements ApplicationRunner
     private void putMePlayerShuffle(SpotifyApiClient client)
     {
         PutMePlayerShuffle putMePlayerShuffleRequest = new PutMePlayerShuffle.Builder(true)
-                .build();
+                .deviceId(deviceIds.get(0)).build();
         Void none = client.sendRequest(putMePlayerShuffleRequest);
         System.out.println(none);
     }
@@ -188,6 +188,7 @@ public class SpotifyscraperApplicationStartUpRunner implements ApplicationRunner
 
     private void putMePlayerVolume(SpotifyApiClient client)
     {
+        // Can't on iPhone
         PutMePlayerVolume putMePlayerVolumeRequest = new PutMePlayerVolume.Builder(5)
                 .deviceId(deviceIds.get(0)).build();
         Void none = client.sendRequest(putMePlayerVolumeRequest);
