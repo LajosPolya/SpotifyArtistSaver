@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.concurrent.ExecutionException;
 
 import static com.lajospolya.spotifyapiwrapper.enumeration.TuneableTrackAttributeFactory.acousticness;
 
@@ -38,11 +38,11 @@ public class SpotifyscraperApplicationStartUpRunner implements ApplicationRunner
 
         SpotifyApiClient client = SpotifyApiClient.createAuthorizationFlowClient(clientAuthorizationProperties.getClientId(), clientAuthorizationProperties.getClientSecret(),
                 clientAuthorizationProperties.getCode(), clientAuthorizationProperties.getRedirectUrl());
-        client.reauthorize();
 
         try
         {
-            getMeDevices(client);
+            client.reauthorizeAsync().get();
+            /*getMeDevices(client);
             postMePlayerNext(client);
             putMePlayer(client);
             getMePlayer(client);
@@ -53,9 +53,9 @@ public class SpotifyscraperApplicationStartUpRunner implements ApplicationRunner
             putMePlayerVolume(client);
             putMePlayerRepeat(client);
             getMePlayerHistory(client);
-            postMePlayerPrevious(client);
+            postMePlayerPrevious(client);*/
             getMePlayerCurrentlyPlaying(client);
-            postMePlayerQueue(client);
+            /*postMePlayerQueue(client);
             deletePlaylistsTracks(client);
             postPlaylists(client);
             getPlaylist(client);
@@ -106,23 +106,23 @@ public class SpotifyscraperApplicationStartUpRunner implements ApplicationRunner
             getArtistsTopTracks(client);
             getArtistsAlbums(client);
             getArtists(client);
-            getArtist(client);
+            getArtist(client);*/
         }
-        catch (SpotifyResponseException e)
+        catch (SpotifyResponseException | ExecutionException | InterruptedException e)
         {
             System.out.println("Caught SpotifyException");
         }
 
-        System.out.println("App Started");
+        //System.out.println("App Started");
     }
 
-    private void getMeDevices(SpotifyApiClient client)
+    private void getMeDevices(SpotifyApiClient client) throws ExecutionException, InterruptedException
     {
         GetMePlayerDevices getMePlayerDevicesRequest = new GetMePlayerDevices.Builder()
                 .build();
-        Devices devices = client.sendRequest(getMePlayerDevicesRequest);
-        deviceIds = devices.getDevices().stream().map(Device::getId).collect(Collectors.toList());
-        System.out.println(devices);
+        Devices devices = client.sendRequestAsync(getMePlayerDevicesRequest).get();
+
+        System.out.println(devices.getDevices().get(0));
     }
 
     private void postMePlayerNext(SpotifyApiClient client)
@@ -145,7 +145,7 @@ public class SpotifyscraperApplicationStartUpRunner implements ApplicationRunner
     {
         GetMePlayer putMePlayerPauseRequest = new GetMePlayer.Builder("CA")
                 .build();
-        String player = client.sendRequest(putMePlayerPauseRequest);
+        CurrentlyPlayingContext player = client.sendRequest(putMePlayerPauseRequest);
         System.out.println(player);
     }
 
@@ -223,7 +223,7 @@ public class SpotifyscraperApplicationStartUpRunner implements ApplicationRunner
     {
         GetMePlayerCurrentlyPlaying getMePlayerCurrentlyPlayingRequest = new GetMePlayerCurrentlyPlaying.Builder("CA")
                 .build();
-        String track = client.sendRequest(getMePlayerCurrentlyPlayingRequest);
+        CurrentlyPlaying track = client.sendRequest(getMePlayerCurrentlyPlayingRequest);
         System.out.println(track);
     }
 
@@ -677,11 +677,12 @@ public class SpotifyscraperApplicationStartUpRunner implements ApplicationRunner
         System.out.println(albums);
     }
 
-    private void getAudioAudioAnalysis(SpotifyApiClient client)
+    private void getAudioAudioAnalysis(SpotifyApiClient client) throws ExecutionException, InterruptedException
     {
         GetAudioAnalysis getAudioAnalysisRequest = new GetAudioAnalysis.Builder("74SFqzOS8Z0rbbG2llSVaQ").build();
-        String audioFeatures = client.sendRequest(getAudioAnalysisRequest);
-        System.out.println(audioFeatures);
+        AudioAnalysis audioAnalysis = client.sendRequestAsync(getAudioAnalysisRequest)
+                .get();
+        System.out.println(audioAnalysis);
     }
 
     private void getSeveralAudioFeatures(SpotifyApiClient client)
