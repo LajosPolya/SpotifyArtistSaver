@@ -4,7 +4,7 @@ import com.lajospolya.spotifyapiwrapper.client.SpotifyApiClient;
 import com.lajospolya.spotifyapiwrapper.enumeration.*;
 import com.lajospolya.spotifyapiwrapper.response.*;
 import com.lajospolya.spotifyapiwrapper.spotifyexception.SpotifyResponseException;
-import com.lajospolya.spotifyapiwrapper.spotifyrequest.*;
+import com.lajospolya.spotifyapiwrapper.request.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
