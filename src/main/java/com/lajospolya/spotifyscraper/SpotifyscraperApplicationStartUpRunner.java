@@ -43,6 +43,10 @@ public class SpotifyscraperApplicationStartUpRunner implements ApplicationRunner
         try
         {
             client.reauthorizeAsync().get();
+            getMeFollowingFetchEtag(client);
+            getMeTracksFetchEtag(client);
+            getMeAlbumsFetchEtag(client);
+            getUsersPlaylistsFetchEtag(client);
             getPlaylistTracksToFetchEtag(client);
             getPlaylistToFetchEtag(client);
             getShowsEpisodes(client);
@@ -122,6 +126,58 @@ public class SpotifyscraperApplicationStartUpRunner implements ApplicationRunner
         }
 
         System.out.println("App Started");
+    }
+
+    private void getMeFollowingFetchEtag(SpotifyApiClient client)
+    {
+        GetMeFollowing getFollowingRequest = new GetMeFollowing.Builder(FollowType.artist)
+                .limit(50).after("0rH93aHDYyJfMAcPB9OKus").build();
+        Following following = client.sendRequest(getFollowingRequest);
+        System.out.println(following);
+
+        GetMeFollowing getFollowingCacheRequest = new GetMeFollowing.Builder(FollowType.artist)
+                .etag(following.getEtag()).limit(50).after("0rH93aHDYyJfMAcPB9OKus").build();
+        Following followingCached = client.sendRequest(getFollowingCacheRequest);
+        System.out.println(followingCached);
+    }
+
+    private void getMeTracksFetchEtag(SpotifyApiClient client)
+    {
+        GetMeTracks getUsersTracksRequest = new GetMeTracks.Builder()
+                .offset(0).limit(50).market("CA").build();
+        Paging<SavedTrack> tracks = client.sendRequest(getUsersTracksRequest);
+        System.out.println(tracks);
+
+        GetMeTracks getUsersTracksCachedRequest = new GetMeTracks.Builder()
+                .etag(tracks.getEtag()).offset(0).limit(50).market("CA").build();
+        Paging<SavedTrack> tracksCached = client.sendRequest(getUsersTracksCachedRequest);
+        System.out.println(tracksCached);
+    }
+
+    private void getMeAlbumsFetchEtag(SpotifyApiClient client)
+    {
+        GetMeAlbums getUsersAlbumsRequest = new GetMeAlbums.Builder()
+                .offset(0).limit(50).market("CA").build();
+        Paging<SavedAlbum> albums = client.sendRequest(getUsersAlbumsRequest);
+        System.out.println(albums);
+
+        GetMeAlbums getUsersAlbumsCachedRequest = new GetMeAlbums.Builder()
+                .etag(albums.getEtag()).offset(0).limit(50).market("CA").build();
+        Paging<SavedAlbum> albumsCached = client.sendRequest(getUsersAlbumsCachedRequest);
+        System.out.println(albumsCached);
+    }
+
+    private void getUsersPlaylistsFetchEtag(SpotifyApiClient client)
+    {
+        GetUsersPlaylists getUsersPlaylistRequest = new GetUsersPlaylists.Builder("lajospolya")
+                .offset(0).limit(50).build();
+        Paging<SimplifiedPlaylist> playlists = client.sendRequest(getUsersPlaylistRequest);
+        System.out.println(playlists);
+
+        GetUsersPlaylists getUsersPlaylistCachedRequest = new GetUsersPlaylists.Builder("lajospolya")
+                .etag(playlists.getEtag()).offset(0).limit(50).build();
+        Paging<SimplifiedPlaylist> playlistsCached = client.sendRequest(getUsersPlaylistCachedRequest);
+        System.out.println(playlistsCached);
     }
 
     private void getPlaylistTracksToFetchEtag(SpotifyApiClient client) throws ExecutionException, InterruptedException
@@ -407,9 +463,9 @@ public class SpotifyscraperApplicationStartUpRunner implements ApplicationRunner
 
     private void getUsersPlaylists(SpotifyApiClient client)
     {
-        GetUsersPlaylists getUsersTracksRequest = new GetUsersPlaylists.Builder("lajospolya")
+        GetUsersPlaylists getUsersPlaylistsRequest = new GetUsersPlaylists.Builder("lajospolya")
                 .offset(0).limit(50).build();
-        Paging<SimplifiedPlaylist> playlists = client.sendRequest(getUsersTracksRequest);
+        Paging<SimplifiedPlaylist> playlists = client.sendRequest(getUsersPlaylistsRequest);
         System.out.println(playlists);
     }
 
@@ -429,9 +485,9 @@ public class SpotifyscraperApplicationStartUpRunner implements ApplicationRunner
 
     private void getMeAlbums(SpotifyApiClient client)
     {
-        GetMeAlbums getUsersTracksRequest = new GetMeAlbums.Builder()
+        GetMeAlbums getUsersAlbumsRequest = new GetMeAlbums.Builder()
                 .offset(0).limit(50).market("CA").build();
-        Paging<SavedAlbum> tracks = client.sendRequest(getUsersTracksRequest);
+        Paging<SavedAlbum> tracks = client.sendRequest(getUsersAlbumsRequest);
         System.out.println(tracks);
     }
 
